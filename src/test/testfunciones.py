@@ -1,4 +1,3 @@
-    
 from math import factorial
 
 
@@ -10,11 +9,10 @@ def funcion_producto(n,k):
     return producto
 
 
-n = 5
-k = 3
+n = 4
+k = 2
 resultado = funcion_producto(n, k)
 print(f"El resultado del producto es: {resultado}")
-
 
 
 def producto_secuencia_geometrica(a1, r, k):
@@ -24,8 +22,7 @@ def producto_secuencia_geometrica(a1, r, k):
         product *= an
     return product
 
-print(' el producto de los primetos',k, 'terminos es',producto_secuencia_geometrica(3, 2, 2))
-
+print(' el producto de los primetos',k, 'terminos es',producto_secuencia_geometrica(3, 5, 2))
 
 def numero_combinatorio(n,k):
     if k > n:
@@ -33,8 +30,7 @@ def numero_combinatorio(n,k):
     else:
         return factorial(n)// (factorial(k)*factorial(n-k))
 
-print(numero_combinatorio(3, 4))
-
+print(numero_combinatorio(4, 2))
 
 
 def s(n,k):
@@ -46,6 +42,9 @@ def s(n,k):
             numerador=((-1)**i)*numero_combinatorio(k+1, i+1)*((k-i)**n)
             suma += numerador
         return (suma/factorial(k))
+    
+print(s(4,2))
+
 
 def f(x):
     return 2*x**2

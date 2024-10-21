@@ -1,5 +1,7 @@
-from pickle import NONE
-def separador_de_palabras(fichero,palabra):
+
+
+
+def contar_palabras(fichero,palabra):
     with open(fichero,'r',encoding='utf-8') as f:
         contenido= f.read().lower()
         palabras=contenido.split()
@@ -7,8 +9,7 @@ def separador_de_palabras(fichero,palabra):
     return contar
 
 
-print(separador_de_palabras('lin_quijote.txt', 'quijote'))
-
+print(contar_palabras('lin_quijote.txt', 'quijote'))
 
 
 def buscar_lineas(fichero,cad):
@@ -21,6 +22,8 @@ def buscar_lineas(fichero,cad):
             if cad in linea_minuscula:
                 lineas_encontradas.append(linea.strip())
     return lineas_encontradas
+print(buscar_lineas('lin_quijote.txt','quijote'))
+
 
 def palabras_unicas(fichero):
     palabras=set()
@@ -33,6 +36,7 @@ def palabras_unicas(fichero):
 
 print(palabras_unicas('archivo_palabras.txt'))
 
+
 import csv
 from typing import Optional
 def longitud_promedio_lineas(file_path: str,sep: str=',') -> Optional[float] :
@@ -40,7 +44,7 @@ def longitud_promedio_lineas(file_path: str,sep: str=',') -> Optional[float] :
     num_lineas = 0
     
     with open(file_path,'r',encoding='utf-8') as file:
-        reader = csv.reader(file,delimeter=sep)
+        reader = csv.reader(file,delimiter=sep)
         for linea in reader:
             total_longitud +=len(linea)
             num_lineas +=1
@@ -49,4 +53,7 @@ def longitud_promedio_lineas(file_path: str,sep: str=',') -> Optional[float] :
         return total_longitud / num_lineas
     else:
         return None
-            
+    
+    
+print(longitud_promedio_lineas('palabras_random.csv',','))
+print(longitud_promedio_lineas('vacio.csv', ','))
