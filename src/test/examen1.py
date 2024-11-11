@@ -130,6 +130,14 @@ def probar_C2():
 print(probar_C2())
 
 
+
+
+
+
+
+def casa():
+    
+
 def probar_S2():
     print('casos validos')
     
