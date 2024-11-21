@@ -44,7 +44,7 @@ class Agregado_lineal(ABC, Generic[E]):
         return removed
         
         
-        
+
         
 
 
