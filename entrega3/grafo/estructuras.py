@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List, TypeVar, Generic, Callable, Tuple
 from abc import ABC, abstractmethod
 
@@ -16,6 +17,7 @@ class Agregado_lineal(ABC, Generic[E]):
         self._elements: List[E] = []
 
     def size(self) -> int:
+        
         """
         Devuelve el número de elementos en la colección.
         :return: Int
@@ -23,6 +25,7 @@ class Agregado_lineal(ABC, Generic[E]):
         return len(self._elements)
 
     def is_empty(self) -> bool:
+        
         """
         Verifica si la colección está vacía.
         :return: Boolean
@@ -30,6 +33,7 @@ class Agregado_lineal(ABC, Generic[E]):
         return self.size() == 0
 
     def elements(self) -> List[E]:
+        
         """
         Devuelve una copia de la lista de elementos.
         :return: List
@@ -96,6 +100,11 @@ class Lista_ordenada(Agregado_lineal[E], Generic[E, R]):
         :param e: Elemento a buscar
         :return: int
         """
+        for i, elem in enumerate(self._elements):
+            if self.__order(e) <= self.__order(elem):
+                return i
+        return len(self._elements)
+
         
 
     def add(self, e: E) -> None:
@@ -103,6 +112,8 @@ class Lista_ordenada(Agregado_lineal[E], Generic[E, R]):
         Inserta un elemento en el lugar correspondiente
         :param e: Elemento a agregar
         """
+        index = self.__index_order(e)
+        self._elements.insert(index, e)
         
 
 
@@ -114,14 +125,21 @@ class Lista_ordenada_sin_repeticion(Lista_ordenada[E, R], Generic[E, R]):
         :param e: Elemento a agregar
         :raise NotImplementedError: Método abstracto
         """
+        if e not in self._elements:
+            index = self.__index_order(e)
+            self._elements.insert(index, e)
+
         
 
 
 
 class Cola(Agregado_lineal[E]):
+    def __init__(self):
+        self.items = []
     @classmethod
     def of(cls) -> 'Cola[E]':
         # Crea una cola vacía
+        return Cola()
         
 
     def add(self, e: E) -> None:
@@ -130,6 +148,25 @@ class Cola(Agregado_lineal[E]):
         :param e: Elemento a agregar
         :raise NotImplementedError: Método abstracto
         """
+        self._elements.append(e)
+        
+    def encolar(self, item):
+        self.items.append(item)
+    def desencolar(self):
+        if not self.esta_vacia():
+            return self.items.pop(0)
+        raise IndexError("La cola está vacía")
+
+    def esta_vacia(self):
+        return len(self.items) == 0
+
+    def tamanio(self):
+        return len(self.items)
+
+    def frente(self):
+        if not self.esta_vacia():
+            return self.items[0]
+        raise IndexError("La cola está vacía")
         
 
 
@@ -137,13 +174,19 @@ class Cola(Agregado_lineal[E]):
 class Cola_prioridad(Generic[E, P]):
     def __init__(self):
         # Inicializa dos listas vacías, una para los elementos y otra para sus prioridades
-        
+        self._elements: List[E] = []
+        self._priorities: List[P] = []
+    
+    @property
 
     def size(self) -> int:
         """
         Devuelve el número de elementos en la cola.
         :return: Int
         """
+        return len(self._elements)
+     
+        
         
 
     def is_empty(self) -> bool:
@@ -151,6 +194,7 @@ class Cola_prioridad(Generic[E, P]):
         Verifica si la cola está vacía.
         :return: Boolean
         """
+        return len(self._elements) == 0
         
 
     def elements(self) -> List[E]:
@@ -158,6 +202,7 @@ class Cola_prioridad(Generic[E, P]):
         Devuelve una copia de la lista de elementos de mayor a menor prioridad
         :return: List
         """
+        return self._elements.copy()
         
 
     def add(self, e: E, priority: P) -> None:
@@ -166,6 +211,9 @@ class Cola_prioridad(Generic[E, P]):
         :param e: Elemento a agregar
         :param priority: Prioridad del elemento
         """
+        index = self.index_order(priority)
+        self._elements.insert(index, e)
+        self._priorities.insert(index, priority)
         
 
     def remove(self) -> E:
@@ -174,6 +222,9 @@ class Cola_prioridad(Generic[E, P]):
         :return: Elemento eliminado
         :raise IndexError: Si la cola está vacía
         """
+        assert len(self._elements) > 0, 'El agregado está vacío'
+        self._priorities.pop(0)
+        return self._elements.pop(0)
         
 
     def add_all(self, ls: List[Tuple[E, P]]) -> None:
@@ -181,7 +232,8 @@ class Cola_prioridad(Generic[E, P]):
         Agrega todos los elementos y sus prioridades a la cola.
         :param ls: Lista de tuplas (elemento, prioridad)
         """
-        
+        for e, p in ls:
+            self.add(e, p)
 
     def decrease_priority(self, e: E, new_priority: P) -> None:
         """
@@ -189,17 +241,23 @@ class Cola_prioridad(Generic[E, P]):
         :param e: Elemento a reducir prioridad.
         :param new_priority: Prioridad nueva para el elemento
         """
-        
+        if e in self._elements:
+            index = self._elements.index(e)
+            old_priority = self._priorities[index]
+            if new_priority < old_priority:
+                self._elements.pop(index)
+                self._priorities.pop(index)
+                self.add(e, new_priority)
 
 
 
 class Pila(Agregado_lineal[E]):
-    """
-    Una Pila es una estructura de datos que sigue el principio LIFO (Last In, First Out).
-    Los elementos se apilan y solo se puede acceder al elemento en la parte superior.
-    
-    IMPORTANTE. Como la estructura subyacente es una lista, la parte superior de la pila es el primer 
-    elemento de la lista.
-    """
+    @staticmethod
+    def of() -> Pila[E]:
+        return Pila()
 
-    
+    def add(self, e: E) -> None:
+        self._elements.insert(0, e)
+
+    def __str__(self):
+        return f"Pila({self._elements})"
