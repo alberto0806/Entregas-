@@ -252,12 +252,23 @@ class Cola_prioridad(Generic[E, P]):
 
 
 class Pila(Agregado_lineal[E]):
+    def __init__(self):
+        self.items = []
     @staticmethod
     def of() -> Pila[E]:
         return Pila()
 
     def add(self, e: E) -> None:
         self._elements.insert(0, e)
-
+    
+    def apilar(self, item):
+        self.items.append(item)
+    
+    def esta_vacia(self):
+        return len(self.items) == 0
+    def desapilar(self):
+        if not self.esta_vacia():
+            return self.items.pop()
+        raise IndexError("La pila está vacía")
     def __str__(self):
         return f"Pila({self._elements})"
